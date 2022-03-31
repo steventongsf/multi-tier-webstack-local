@@ -8,12 +8,16 @@ pipeline {
         }
         stage('build') {
             steps {
-                sh "mvn install -e"
+                dir("app") {
+                    sh "mvn install -e"
+                }
             }
         }
         stage('test') {
             steps {
-                sh "mvn test -e"
+                dir("app") {
+                    sh "mvn test -e"
+                }
             }
         }
     }
