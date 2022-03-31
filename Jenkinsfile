@@ -3,8 +3,7 @@ pipeline {
     stages {
         stage('checkout') {
             steps {
-                git branch: 'master' url: 'https://github.com/steventongsf/multitier-webstack'
-
+                git branch: 'master', url: 'https://github.com/steventongsf/multitier-webstack'
             }
         }
         stage('build') {
