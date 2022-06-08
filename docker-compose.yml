@@ -1,0 +1,21 @@
+services:
+    jenkins:
+        image: docker.io/steventongsf/jenkins:latest 
+        volumes: 
+            - ./jenkins_home:/var/lib/jenkins
+        ports:
+            - "8080:8080"
+    control:
+        stdin_open: true # docker run -i
+        tty: true        # docker run -t    
+        build:
+            context: .
+            dockerfile: Dockerfile.control
+        image: docker.io/steventongsf/control:latest 
+        volumes: 
+            #- ./devopsadmin:/home/devopsadmin
+            - $HOME/.aws:/home/devopsadmin/.aws
+            - ./ansible:/home/devopsadmin/ansible
+        #privileged: true
+volumes:
+    jenkins_home:

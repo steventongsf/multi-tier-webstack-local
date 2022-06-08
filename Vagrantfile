@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
   
 ### RabbitMQ vm  ####
   config.vm.define "rmq01" do |rmq01|
-    rmq01.vm.box = "geerlingguy/centos7"
+    rmq01.vm.box = "centos/7"
     rmq01.vm.hostname = "rmq01"
     rmq01.vm.network "private_network", ip: "192.168.56.16"
     rmq01.vm.provision "shell", path: "rabbitmq.sh"  
@@ -41,7 +41,7 @@ Vagrant.configure("2") do |config|
   
 ### tomcat vm ###
    config.vm.define "app01" do |app01|
-    app01.vm.box = "geerlingguy/centos7"
+    app01.vm.box = "centos/7"
     app01.vm.hostname = "app01"
     app01.vm.network "private_network", ip: "192.168.56.12"
     app01.vm.provision "file", source: "app/target/demoapp-1.0.0.war", destination: "/tmp/demoapp.war"
@@ -55,7 +55,7 @@ Vagrant.configure("2") do |config|
   
 ### Nginx VM ###
   config.vm.define "web01" do |web01|
-    web01.vm.box = "ubuntu/xenial64"
+    web01.vm.box = "ubuntu/focal64"
     web01.vm.hostname = "web01"
     web01.vm.network "private_network", ip: "192.168.56.11"
     web01.vm.provision "shell", path: "nginx.sh"  
