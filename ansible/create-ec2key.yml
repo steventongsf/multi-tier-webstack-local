@@ -1,0 +1,18 @@
+- hosts: localhost
+  connection: local
+  gather_facts: false 
+  tasks:
+    - name: ec2 key
+      ec2_key:
+        name: sample
+        region: us-east-1
+      register: keyout
+    - name: print key
+      debug:
+        var: keyout
+        verbosity: 1
+    - name: store key
+      copy:
+        content: "{{ keyout.key.private_key }}"
+        dest: ../sample-key.pem
+      when: keyout.changed
