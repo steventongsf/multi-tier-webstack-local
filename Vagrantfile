@@ -4,7 +4,7 @@ Vagrant.configure("2") do |config|
   
 ### DB vm  ####
   config.vm.define "db01" do |db01|
-    db01.vm.box = "geerlingguy/centos7"
+    db01.vm.box = "centos/7"
     db01.vm.hostname = "db01"
     db01.vm.network "private_network", ip: "192.168.56.15"
     db01.vm.provision "file", source: "app/target/classes/db_backup.sql", destination: "/tmp/db_backup.sql"
@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
   
 ### Memcache vm  #### 
   config.vm.define "mc01" do |mc01|
-    mc01.vm.box = "geerlingguy/centos7"
+    mc01.vm.box = "centos/7"
     mc01.vm.hostname = "mc01"
     mc01.vm.network "private_network", ip: "192.168.56.14"
     mc01.vm.provision "shell", path: "memcache.sh"  
