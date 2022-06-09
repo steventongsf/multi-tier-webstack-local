@@ -1,0 +1,8 @@
+# Bastion Vars
+# us-east-1 ami as of 4.3.2023
+bastion_ami: ami-007855ac798b5175e
+
+# I have a dynamic IP address, so I will need to update as needed
+# MYIP: 183.83.39.203/32
+# For now, allow all IP addresses
+MYIP: 0.0.0.0/0

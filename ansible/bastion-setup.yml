@@ -1,0 +1,74 @@
+---
+- name: Setup bastion host
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Import vpc variables
+      include_vars: vars/vpc_setup
+    - name: Import bastion variables
+      include_vars: vars/bastion_setup
+
+    - name: Import vpc variables from VPC creation
+      include_vars: /home/devopsadmin/vars/vpc-output_vars
+
+    - name: Create ec2 key
+      ec2_key:
+        name: exampleapp-key
+        region: "{{region}}"
+      register: key_out
+
+    - name: Creates directory
+      file:
+        path: /home/devopsadmin/vars
+        state: directory
+
+    - name: Save private key to file
+      copy:
+        content: "{{key_out.key.private_key}}"
+        dest: "/home/devopsadmin/vars/bastion-key.pem"
+        mode: 0600
+      when: key_out.changed
+
+    - name: create bastion host security group
+      ec2_group:
+        name: bastion-host-sg
+        description: Allow port 22 from everywhere and all ports within security group
+        region: "{{region}}"
+        vpc_id: "{{vpcid}}"
+        rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: "{{MYIP}}"
+      register: bastion_sg_out
+
+    - name: creating bastion host
+      ec2:
+        key_name: exampleapp-key
+        region: "{{region}}"
+        instance_type: t2.micro
+        image: "{{ bastion_ami }}"
+        wait: yes
+        wait_timeout: 300
+        instance_tags:
+          Name: "Bastion_host"
+          Project: exampleapp
+          Owner: me
+        exact_count: 1
+        count_tag:
+          Name: "bastion_host"
+          Project: exampleapp-key
+          Owner: me
+        group_id: "{{bastion_sg_out.group_id}}"
+        vpc_subnet_id: "{{pubsub1id}}"
+      register: bastionhost_out
+
+    - name: insert/update "bastion_sg_out" in vpc-output_vars
+      blockinfile:
+        path: /home/devopsadmin/vars/vpc-output_vars
+        backup: yes
+        block: |
+          BastionSGid: {{bastion_sg_out.group_id}}
+
+
