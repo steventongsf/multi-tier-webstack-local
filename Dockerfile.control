@@ -1,10 +1,12 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 RUN  apt-get update
-RUN  apt-get install openjdk-17-jdk maven wget curl gnupg ansible python3-pip systemctl -y 
+RUN  apt-get install sudo openjdk-17-jdk maven wget curl gnupg ansible python3-pip systemctl -y 
 RUN pip install awscli boto3
-RUN adduser devopsadmin
-RUN chown -R devopsadmin:devopsadmin /home/devopsadmin
-USER devopsadmin
+#RUN adduser devopsadmin
+#RUN chown -R devopsadmin:devopsadmin /home/devopsadmin
+#USER devopsadmin
+RUN mkdir /home/devopsadmin
 WORKDIR /home/devopsadmin
+
 
