@@ -14,8 +14,8 @@ services:
         image: docker.io/steventongsf/control:latest 
         volumes: 
             #- ./devopsadmin:/home/devopsadmin
-            - $HOME/.aws:/home/devopsadmin/.aws
-            - ./ansible:/home/devopsadmin/ansible
+            - $HOME/.aws:/root/.aws
+            - ./ansible:/home/devopsadmin
         #privileged: true
 volumes:
     jenkins_home:
