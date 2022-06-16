@@ -1,0 +1,5 @@
+web_ami: ami-007855ac798b5175e
+app_ami: ami-007855ac798b5175e
+memcache_ami: ami-007855ac798b5175e
+rmq_ami: ami-007855ac798b5175e
+mysql_ami: ami-007855ac798b5175e
