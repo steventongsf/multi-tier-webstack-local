@@ -10,7 +10,7 @@
       include_vars: vars/bastion_setup
 
     - name: Import vpc variables from VPC creation
-      include_vars: /home/devopsadmin/vars/vpc-output_vars
+      include_vars: vars/vpc-output_vars
 
     - name: Create ec2 key
       ec2_key:
@@ -18,17 +18,23 @@
         region: "{{region}}"
       register: key_out
 
-    - name: Creates directory
+    - name: Creates local directory if missing
       file:
-        path: /home/devopsadmin/vars
+        path: vars
         state: directory
 
     - name: Save private key to file
       copy:
         content: "{{key_out.key.private_key}}"
-        dest: "/home/devopsadmin/vars/bastion-key.pem"
+        dest: "vars/bastion-key.pem"
         mode: 0600
       when: key_out.changed
+
+    - name: copy file to local
+      copy: 
+        src: "vars/bastion-key.pem"
+        dest: "/tmp/bastion-key.pem"
+        mode: 0600
 
     - name: create bastion host security group
       ec2_group:
@@ -66,7 +72,7 @@
 
     - name: insert/update "bastion_sg_out" in vpc-output_vars
       blockinfile:
-        path: /home/devopsadmin/vars/vpc-output_vars
+        path: vars/vpc-output_vars
         backup: yes
         block: |
           BastionSGid: {{bastion_sg_out.group_id}}
